@@ -1,10 +1,10 @@
 import json
 from dataclasses import asdict
-from pathlib import Path
 
 import click
 
 from repo2env import Environment
+from repo2env.fetch import fetch_from_url
 
 
 @click.command()
@@ -24,15 +24,16 @@ def cli(repository, dirs, verbose):
 
     Usage: repo2env /path/to/repository
     """
-    for path in (Path(repository).joinpath(dir_) for dir_ in dirs):
-        if verbose:
-            click.echo(f"Scanning {path} ...", err=True)
-        if path.is_dir():
-            env = Environment.scan(path)
-            click.echo(json.dumps(asdict(env)))
-            break
-    else:
-        raise RuntimeError()
+    with fetch_from_url(repository) as repo:
+        for path in (repo.joinpath(dir_) for dir_ in dirs):
+            if verbose:
+                click.echo(f"Scanning {path} ...", err=True)
+            if path.is_dir():
+                env = Environment.scan(path)
+                click.echo(json.dumps(asdict(env)))
+                break
+        else:
+            raise RuntimeError(f"Unable to parse environment for: {repository}")
 
 
 if __name__ == "__main__":
