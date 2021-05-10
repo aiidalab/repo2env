@@ -47,8 +47,8 @@ def _parse_git_url(git_url):
     if "@" in git_url:
         url, rev = urldefrag(git_url).url.rsplit("@", 1)
     else:
-        url, rev = urldefrag(git_url).url, "HEAD"
-    return url, rev, path
+        url, rev = urldefrag(git_url).url, None
+    return url, (rev or "HEAD"), path
 
 
 @contextmanager
