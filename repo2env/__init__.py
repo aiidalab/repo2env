@@ -6,3 +6,6 @@ __all__ = [
     "Environment",
     "fetch_from_url",
 ]
+
+
+__version__ = "0.1.0"
