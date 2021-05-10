@@ -55,13 +55,13 @@ class Environment:
         def _parse_setup_cfg(setup_cfg):
             cfg = ConfigParser()
             cfg.read_string(setup_cfg)
-            return cfg["options"]["install_requires"]
+            return cfg["options"].get("install_requires", [])
 
         try:
             yield "python_requirements", list(
                 _parse_reqs(_parse_setup_cfg(path.joinpath("setup.cfg").read_text()))
             )
-        except FileNotFoundError:
+        except (FileNotFoundError, KeyError):
             try:
                 yield "python_requirements", list(
                     _parse_reqs(path.joinpath("requirements.txt").read_text())
