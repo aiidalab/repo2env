@@ -96,13 +96,18 @@ class GitPath(os.PathLike):
 
 class GitRepo(Repo):
     def get_current_branch(self):
-        branch = run(
-            ["git", "branch", "--show-current"],
-            cwd=Path(self.path),
-            check=True,
-            capture_output=True,
-            encoding="utf-8",
-        ).stdout
+        try:
+            branch = run(
+                ["git", "branch", "--show-current"],
+                cwd=Path(self.path),
+                check=True,
+                capture_output=True,
+                encoding="utf-8",
+            ).stdout
+        except CalledProcessError as error:
+            if error.returncode == 129:
+                raise RuntimeError("repo2env requires at least git version 2.22.")
+            raise
         if not branch:
             raise RuntimeError(
                 "Unable to determine current branch name, likely in detached HEAD state."
