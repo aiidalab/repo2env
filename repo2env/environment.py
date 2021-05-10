@@ -48,9 +48,9 @@ class Environment:
     @staticmethod
     def _scan(path):
         def _parse_reqs(requirements):
-            for line in requirements.splitlines():
-                if not line.strip().startswith("#"):
-                    yield line.strip()
+            for line in (line.strip() for line in requirements.splitlines()):
+                if line and not line.startswith("#"):
+                    yield line
 
         def _parse_setup_cfg(setup_cfg):
             cfg = ConfigParser()
