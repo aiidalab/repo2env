@@ -9,7 +9,7 @@ But instead of generating a docker image it returns a specification that can the
 
 The easiest way to install this tool is either directly with pip:
 ```bash
-~ $ pip install git+https://github.com/aiidalab/repo2env.git
+~ $ pip install repo2env
 ```
 
 Or clone the repository first and then install:
